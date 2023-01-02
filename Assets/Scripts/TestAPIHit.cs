@@ -38,6 +38,17 @@ public class TestAPIHit : MonoBehaviour {
         var result = Task.Run(Req);
     }
 
+    public void SendRequestVoice() {
+        //question = textInput.text;
+        if (question == "") {
+            question = personalityProfile.GetPersonality();
+        }
+        if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
+            question = personalityProfile.GetPersonality() + "Q: " + textInput.text;
+        }
+        var result = Task.Run(Req);
+    }
+
     async Task<CompletionResult> Req() {
         if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question,  max_tokens: 100, top_p: 1));  // temperature: 0.1));        

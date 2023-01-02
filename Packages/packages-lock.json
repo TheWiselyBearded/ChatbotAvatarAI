@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.oshoham.unity-google-cloud-streaming-speech-to-text": {
+      "version": "0.1.8",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.collab-proxy": {
       "version": "1.17.1",
       "depth": 0,
