@@ -301,8 +301,8 @@ GameObject:
   - component: {fileID: 160527259}
   - component: {fileID: 160527258}
   - component: {fileID: 160527257}
-  - component: {fileID: 160527261}
   - component: {fileID: 160527262}
+  - component: {fileID: 160527261}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -404,22 +404,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 160527256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a7b6755f90c23d4baa1a1832f01becf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outputText: {fileID: 571783798}
-  inputField: {fileID: 1063444687}
-  speakButton: {fileID: 1445837540}
-  audioSource: {fileID: 791813957}
---- !u!114 &160527262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160527256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9267197cda936e448a0687481a78084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -431,7 +415,23 @@ MonoBehaviour:
     with "Unknown". Q: What is human life expectancy in the United States?'
   textInput: {fileID: 1063444687}
   question: 
-  hello: {fileID: 160527261}
+  hello: {fileID: 160527262}
+--- !u!114 &160527262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160527256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7b6755f90c23d4baa1a1832f01becf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outputText: {fileID: 571783798}
+  inputField: {fileID: 1063444687}
+  speakButton: {fileID: 1445837540}
+  audioSource: {fileID: 791813957}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1275,7 +1275,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506884610}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a6c32d06b48d244b9c65729404d2afe, type: 3}
   m_Name: 
@@ -2967,7 +2967,7 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   provider: 1
   enableAcceleration: 1
-  enableKeyboardInput: 1
+  enableKeyboardInput: 0
   enableTouchInput: 1
   audioLoopback: 1
   loopbackKey: 108
@@ -2976,7 +2976,7 @@ MonoBehaviour:
   skipAudioSource: 0
   gain: 1
   debugLaughterKey: 101
-  showLaughter: 0
+  showLaughter: 1
   laughterScore: 0
 --- !u!82 &791813957
 AudioSource:
@@ -4589,7 +4589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 160527262}
+      - m_Target: {fileID: 160527261}
         m_TargetAssemblyTypeName: TestAPIHit, Assembly-CSharp
         m_MethodName: SendRequest
         m_Mode: 1

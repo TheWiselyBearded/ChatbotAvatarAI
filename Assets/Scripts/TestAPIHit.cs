@@ -99,7 +99,7 @@ public class PersonalityProfile {
         "A: The 1992 Olympics were held in Barcelona, Spain." +
         "Q: How many squigs are in a bonk?" +
         "A: Unknown";
-    string Alireza = "My name is Alireza and I am a principal software engineer studying mixed reality and AI at ASU. This is a paragraph by paragraph summary of my research experience :";
+    string Alireza = "My name is Garrett Duffy and I am a principal mechanical engineer studying biomedical sciences at ASU. This is a paragraph summary of my research experiences:";
     public PersonalityProfile() {
         personalities = new Dictionary<ProfileSelection, string>();
         personalities.Add(ProfileSelection.SuperSmart, SuperSmart);
