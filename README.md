@@ -66,6 +66,11 @@ Sometimes on the first time opening the project, you might get the following err
 
 Once you've set up the configuration files, you can run the scene and begin interacting with the NPC by asking it questions. The NPC will respond within seconds.
 
+## Notes
+Models Used:
+This project currently uses the TextDavinciV3 model provided by OpenAI's GPT-3 API. Additionally, there is a separate branch attempting to update to the latest publicly available model, ChatGpt3_5Turbo.
+
+In addition to the APIs and packages mentioned above, this project also uses the Meta Movement SDK. More information on this SDK can be found in its GitHub repository at https://github.com/oculus-samples/Unity-Movement.
 
 
 
