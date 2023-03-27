@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ChatBotController : MonoBehaviour {
+    // Set up references to other components and APIs
     public AzureVoiceGenerator azureVoice;
     public OpenAIAPI api;
     public OpenAI_RequestConfiguration requestConfiguration;
@@ -20,6 +21,7 @@ public class ChatBotController : MonoBehaviour {
     protected Dictionary<string, ChatbotPersonalityProfile> chatbotPersonalities;     // for accessing relevant properties within code
     public string setPersonalityProfileName;
 
+    // Set up debugging and user input fields
     public TextMeshProUGUI textDebugger;
     public string question;
 
@@ -27,26 +29,27 @@ public class ChatBotController : MonoBehaviour {
     protected bool playAudio = false;
 
     void Awake() {
+        // Read configuration data from file
         string jsonString = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "services_config.json"));
         ConfigData configData = JsonUtility.FromJson<ConfigData>(jsonString);
         if (configData == null) Debug.LogError("Failed to find configuration file. Please add in Streaming Assets.");
-        
-        api = new OpenAIAPI(new APIAuthentication(configData.OpenAI_APIKey)); // create object manually
+
+        // Set up APIs using configuration data
+        api = new OpenAIAPI(new APIAuthentication(configData.OpenAI_APIKey));
         azureVoice.SetServiceConfiguration(configData.AzureVoiceSubscriptionKey, configData.AzureVoiceRegion);
 
+        // Set up dictionary of personality profiles
         chatbotPersonalities = new Dictionary<string, ChatbotPersonalityProfile>();
         foreach (ChatbotPersonalityProfile chatbotPersonality in personalityProfiles) {
             chatbotPersonalities.Add(chatbotPersonality.PersonalityName, chatbotPersonality);
         }
-        if (setPersonalityProfileName == "") setPersonalityProfileName = personalityProfiles[0].PersonalityName;        
+        if (setPersonalityProfileName == "") setPersonalityProfileName = personalityProfiles[0].PersonalityName; // Default personality profile
+
         //StreamCompletionAsync(CompletionRequest request, Action < CompletionResult > resultHandler);        
         //var result = Task.Run(Req);   // Get the Unity synchronization context
 
     }
 
-    /// <summary>
-    /// Invoked via button press
-    /// </summary>
     public void SendRequest() {
         if (question == "") {
             Debug.Log("Failed to receive user prompt");
@@ -59,6 +62,7 @@ public class ChatBotController : MonoBehaviour {
     }
 
 
+    // Asynchronous method to create OpenAI API request
     async Task<CompletionResult> CreateAPIRequestOpenAI() {
         res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
                                                             presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
@@ -71,6 +75,7 @@ public class ChatBotController : MonoBehaviour {
             res.Completions.Count > 0 && playAudio) {   // essentially: if audio received for playback
             Debug.Log(res.Completions[0].Text); // log response from OpenAI
 
+            // Set text for Azure Voice API to speak
             azureVoice.inputField.text = res.Completions[0].Text;
             
             azureVoice.InvokeAzureVoiceRequest();
@@ -79,6 +84,7 @@ public class ChatBotController : MonoBehaviour {
     }
 
     /// <summary>
+    /// Method to handle user input from Google Cloud Speech to Text API
     /// Using Google Streaming Recognizer component, the callback for "OnFinalResult"
     /// will invoke this method which feeds input to GPT3 API.
     /// </summary>
