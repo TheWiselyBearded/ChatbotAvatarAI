@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TestAPIHit : MonoBehaviour {
-    public ChatbotPersonalityProfile personalityProfile;
+    public PersonalityProfile personalityProfile;
     public string startingPrompt = "I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\". Q: What is human life expectancy in the United States?";
     public InputField textInput;
     public string question;
@@ -32,7 +32,7 @@ public class TestAPIHit : MonoBehaviour {
         if (question == "") {
             question = personalityProfile.GetPersonality();
         }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
+        if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
             question = personalityProfile.GetPersonality() + "Q: " + textInput.text;
         }
         var result = Task.Run(Req);
@@ -43,10 +43,10 @@ public class TestAPIHit : MonoBehaviour {
         if (question == "") {
             question = personalityProfile.GetPersonality();
         }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
+        if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
             question = personalityProfile.GetPersonality() + "Q: " + textInput.text;
         }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.Alirza &&
+        if (personalityProfile.personality == PersonalityProfile.ProfileSelection.Alirza &&
             numQuestions > 0) {
             question = "My name is Alireza and I am a graduate student studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary on what I think about the following question:" + question;
         }
@@ -55,7 +55,7 @@ public class TestAPIHit : MonoBehaviour {
     }
 
     async Task<CompletionResult> Req() {
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
+        if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question,  max_tokens: 100, top_p: 1));  // temperature: 0.1));        
         } else {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, 200, 0.5, presencePenalty: 0.1, frequencyPenalty: 0.1));  // temperature: 0.1));        
@@ -70,7 +70,7 @@ public class TestAPIHit : MonoBehaviour {
         if (res != null && 
             res.Completions.Count > 0 && playAudio) {
             Debug.Log(res.Completions[0].Text);
-            if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
+            if (personalityProfile.personality == PersonalityProfile.ProfileSelection.SuperSmart) {
                 hello.inputField.text = res.Completions[0].Text;
             } else {
                 hello.inputField.text = res.Completions[0].Text;

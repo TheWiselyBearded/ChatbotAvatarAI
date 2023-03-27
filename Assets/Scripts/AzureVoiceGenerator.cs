@@ -16,7 +16,6 @@ public class AzureVoiceGenerator : MonoBehaviour {
     // Hook up the three properties below with a Text, InputField and Button object in your UI.
     public Text outputText;
     public InputField inputField;
-    public Button speakButton;
     public AudioSource audioSource;
 
     // Replace with your own subscription key and service region (e.g., "westus").
@@ -102,10 +101,7 @@ public class AzureVoiceGenerator : MonoBehaviour {
         else if (inputField == null) {
             message = "inputField property is null! Assign a UI InputField element to it.";
             UnityEngine.Debug.LogError(message);
-        } else if (speakButton == null) {
-            message = "speakButton property is null! Assign a UI Button to it.";
-            UnityEngine.Debug.LogError(message);
-        } else {
+        }  else {
             // Continue with normal initialization, Text, InputField and Button objects are present.
             inputField.text = "Enter text you wish spoken here.";
             message = "Click button to synthesize speech";
@@ -128,9 +124,6 @@ public class AzureVoiceGenerator : MonoBehaviour {
 
     void Update() {
         lock (threadLocker) {
-            if (speakButton != null) {
-                speakButton.interactable = !waitingForSpeak;
-            }
 
             if (outputText != null) {
                 outputText.text = message;

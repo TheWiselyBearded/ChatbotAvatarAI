@@ -14,7 +14,7 @@ public class VoiceScriber : MonoBehaviour
     /// </summary>
     /// <param name="youSaid"></param>
     public void OnFinalResult(string youSaid) {
-        return; // NOTE: For debugging purposes
+        //return; // NOTE: For debugging purposes
         textMesh.text = "you said: " + youSaid;// + "\n\nPress submit button if that's right";
         gpt3.question = youSaid;
         gpt3.SendRequestVoice();

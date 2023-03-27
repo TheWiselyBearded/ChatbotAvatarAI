@@ -11,12 +11,14 @@ using UnityEngine.UI;
 public class ChatBotController : MonoBehaviour {
     public AzureVoiceGenerator azureVoice;
     public OpenAIAPI api; //= new OpenAIAPI(new APIAuthentication("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")); // create object manually
+    public OpenAI_RequestConfiguration requestConfiguration;
     public CompletionResult res;
-    public ChatbotPersonalityProfile personalityProfile;
+    
+    
+    public ChatbotPersonalityProfile[] personalityProfiles; // for editor assignment
+    protected Dictionary<string, ChatbotPersonalityProfile> chatbotPersonalities;     // for accessing relevant properties within code
+    public string setPersonalityProfileName;
 
-
-    public string startingPrompt = "I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\". Q: What is human life expectancy in the United States?";
-    public InputField textInput;
     public TextMeshProUGUI textDebugger;
     public string question;
 
@@ -25,6 +27,11 @@ public class ChatBotController : MonoBehaviour {
 
     void Awake() {
         api = new OpenAIAPI(new APIAuthentication("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")); // create object manually
+        chatbotPersonalities = new Dictionary<string, ChatbotPersonalityProfile>();
+        foreach (ChatbotPersonalityProfile chatbotPersonality in personalityProfiles) {
+            chatbotPersonalities.Add(chatbotPersonality.PersonalityName, chatbotPersonality);
+        }
+        if (setPersonalityProfileName == "") setPersonalityProfileName = personalityProfiles[0].PersonalityName;
         //var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("One Two Three One Two", temperature: 0.1));
         //StreamCompletionAsync(CompletionRequest request, Action < CompletionResult > resultHandler);
         // Get the Unity synchronization context
@@ -36,46 +43,44 @@ public class ChatBotController : MonoBehaviour {
     /// Invoked via button press
     /// </summary>
     public void SendRequest() {
-        question = textInput.text;
         if (question == "") {
-            question = personalityProfile.GetPersonality();
+            Debug.Log("Failed to receive user prompt");
+            return;
         }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
-            question = personalityProfile.GetPersonality() + "Q: " + textInput.text;    // prepend personality assignment, then proceed with question
-        }
-        var result = Task.Run(CreateAPIRequestOpenAI);
-    }
-
-    
-    public void SendRequestVoice() {
-        //question = textInput.text;
-        if (question == "") {
-            question = personalityProfile.GetPersonality();
-        }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
-            question = personalityProfile.GetPersonality() + "Q: " + textInput.text;
-        }
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.Alirza &&
-            numQuestions > 0) {
-            question = "My name is Alireza and I am a graduate student studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary on what I think about the following question:" + question;
-        }
+        // prepend personality assignment, then proceed with question        
+        question = chatbotPersonalities[setPersonalityProfileName].PersonalityDescription + "Q: " + textDebugger.text;    
         var result = Task.Run(CreateAPIRequestOpenAI);
         numQuestions++;
     }
 
+    
+    /*public void SendRequestVoice() {
+        //question = textInput.text;
+        if (question == "") {
+            Debug.Log("Failed to receive any voice message/recording.");
+            return;
+        }
+        if (setPersonalityProfileName.personality == ChatbotPersonalityProfile.ProfileSelection.Alirza &&
+            numQuestions > 0) {
+            question = "My name is Alireza and I am a graduate student studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary on what I think about the following question:" + question;
+        }
+    }*/
+
     async Task<CompletionResult> CreateAPIRequestOpenAI() {
-        if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
+        /*if (setPersonalityProfileName.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, max_tokens: 100, top_p: 1));  // temperature: 0.1));        
         } else {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, 200, 0.5, presencePenalty: 0.1, frequencyPenalty: 0.1));  // temperature: 0.1));        
-        }
+        }*/
+        res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
+                                                            presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
         playAudio = true;
         return res;
     }    
 
     private void Update() {
         if (res != null &&
-            res.Completions.Count > 0 && playAudio) {
+            res.Completions.Count > 0 && playAudio) {   // essentially: if audio received for playback
             Debug.Log(res.Completions[0].Text); // log response from OpenAI
 
             azureVoice.inputField.text = res.Completions[0].Text;
@@ -93,7 +98,7 @@ public class ChatBotController : MonoBehaviour {
     public void OnFinalResult(string youSaid) {
         textDebugger.text = "you said: " + youSaid;// + "\n\nPress submit button if that's right";
         question = youSaid;
-        SendRequestVoice();
+        SendRequest();
     }
 
     private async Task StreamCompletionAsync(CompletionRequest completionRequest, object request, bool v) {
@@ -105,16 +110,36 @@ public class ChatBotController : MonoBehaviour {
 
 
 }
+
+[System.Serializable]
+public class OpenAI_RequestConfiguration {
+    public OpenAI_RequestConfiguration() { }
+    public OpenAI_RequestConfiguration(double frequencyPenalty = 0.1, double presencePenality=0.1,  double topP = 1, double temperature = 0.5, int maxTokens = 200) {        
+        FrequencyPenalty = frequencyPenalty;
+        TopP = topP;
+        Temperature = temperature;
+        MaxTokens = maxTokens;
+    }
+    //public int? Logprobs { get; set; }
+    //public bool Stream { get; }
+    //public int? NumChoicesPerPrompt { get; set; }
+    public double FrequencyPenalty;
+    public double TopP;
+    //public string[] MultipleStopSequences { get; set; }
+    public double Temperature;
+    public int MaxTokens;
+    //public string Prompt;
+    //public string[] MultiplePrompts { get; set; }
+    //public object CompiledPrompt { get; }
+    public double PresencePenalty;
+    //public string StopSequence { get; set; }
+}
+
 [System.Serializable]
 public class ChatbotPersonalityProfile {
-    [System.Serializable]
-    public enum ProfileSelection {
-        SuperSmart,
-        Alirza,
-        None
-    }
-    public ProfileSelection personality;
-    public Dictionary<ProfileSelection, string> personalities;
+    public string PersonalityName;
+    public string PersonalityDescription;
+
 
     string SuperSmart = "I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\". " +
         "Q: What is human life expectancy in the United States?" +
@@ -132,17 +157,9 @@ public class ChatbotPersonalityProfile {
         "Q: How many squigs are in a bonk?" +
         "A: Unknown";
     string Alireza = "My name is Alireza and I am a principal software engineer studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary of my research experience:";
-    public ChatbotPersonalityProfile() {
-        personalities = new Dictionary<ProfileSelection, string>();
-        personalities.Add(ProfileSelection.SuperSmart, SuperSmart);
-        personalities.Add(ProfileSelection.Alirza, Alireza);
-        personality = ProfileSelection.SuperSmart;
+    public ChatbotPersonalityProfile(string name, string personality) {
+        PersonalityName = name;
+        PersonalityDescription = personality;
     }
 
-    public string GetPersonality() {
-        if (personalities.TryGetValue(personality, out string value))
-            return value;
-        else
-            return "";
-    }
 }
