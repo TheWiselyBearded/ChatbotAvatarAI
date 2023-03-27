@@ -19,8 +19,8 @@ public class AzureVoiceGenerator : MonoBehaviour {
     public AudioSource audioSource;
 
     // Replace with your own subscription key and service region (e.g., "westus").
-    private const string SubscriptionKey = "aa3b7c6cee314dd89ea1e9144d980d52";
-    private const string Region = "eastus";
+    public string SubscriptionKey; 
+    public string Region;
 
     private const int SampleRate = 24000;
 
@@ -32,6 +32,10 @@ public class AzureVoiceGenerator : MonoBehaviour {
     private SpeechConfig speechConfig;
     private SpeechSynthesizer synthesizer;
 
+    public void SetServiceConfiguration(string _key, string _region) {
+        SubscriptionKey = _key;
+        Region = _region;
+    }
 
     /// <summary>
     /// With a hard-coded reference to input field, this method

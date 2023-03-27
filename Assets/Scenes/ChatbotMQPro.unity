@@ -1541,6 +1541,8 @@ MonoBehaviour:
   outputText: {fileID: 571783798}
   inputField: {fileID: 1063444687}
   audioSource: {fileID: 791813957}
+  SubscriptionKey: 
+  Region: 
 --- !u!114 &434629152
 MonoBehaviour:
   m_ObjectHideFlags: 0
