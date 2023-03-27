@@ -29,7 +29,8 @@ In the `StreamingAssets` folder, create a `services_config.json` file with the f
 "OpenAI_APIKey": "your_openai_api_key",
 "AzureVoiceSubscriptionKey": "your_azure_voice_subscription_key",
 "AzureVoiceRegion": "your_azure_voice_region"
-}```
+}
+```
 
 
 Create a `gcp_credentials.json` file for Google Cloud runtime to read configuration properties from using the following template:
@@ -46,7 +47,8 @@ Create a `gcp_credentials.json` file for Google Cloud runtime to read configurat
 "token_uri": "https://oauth2.googleapis.com/token",
 "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
 "client_x509_cert_url": "YOUR CLIENT CERT URL"
-}```
+}
+```
 
 
 ### Known Issues
