@@ -4,19 +4,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestAPIHit : MonoBehaviour {
+public class ChatBotController : MonoBehaviour {
+    public AzureVoiceGenerator azureVoice;
+    public OpenAIAPI api; //= new OpenAIAPI(new APIAuthentication("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")); // create object manually
+    public CompletionResult res;
     public ChatbotPersonalityProfile personalityProfile;
+
+
     public string startingPrompt = "I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\". Q: What is human life expectancy in the United States?";
     public InputField textInput;
+    public TextMeshProUGUI textDebugger;
     public string question;
-    public HelloWorld hello;
-    OpenAIAPI api = new OpenAIAPI(new APIAuthentication("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")); // create object manually
-    // Start is called before the first frame update
-    CompletionResult res;
-    void Start() {
+
+    protected int numQuestions;
+    protected bool playAudio = false;
+
+    void Awake() {
+        api = new OpenAIAPI(new APIAuthentication("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")); // create object manually
         //var result = await api.Completions.CreateCompletionAsync(new CompletionRequest("One Two Three One Two", temperature: 0.1));
         //StreamCompletionAsync(CompletionRequest request, Action < CompletionResult > resultHandler);
         // Get the Unity synchronization context
@@ -33,11 +41,12 @@ public class TestAPIHit : MonoBehaviour {
             question = personalityProfile.GetPersonality();
         }
         if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
-            question = personalityProfile.GetPersonality() + "Q: " + textInput.text;
+            question = personalityProfile.GetPersonality() + "Q: " + textInput.text;    // prepend personality assignment, then proceed with question
         }
-        var result = Task.Run(Req);
+        var result = Task.Run(CreateAPIRequestOpenAI);
     }
-    int numQuestions;
+
+    
     public void SendRequestVoice() {
         //question = textInput.text;
         if (question == "") {
@@ -50,34 +59,41 @@ public class TestAPIHit : MonoBehaviour {
             numQuestions > 0) {
             question = "My name is Alireza and I am a graduate student studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary on what I think about the following question:" + question;
         }
-        var result = Task.Run(Req);
+        var result = Task.Run(CreateAPIRequestOpenAI);
         numQuestions++;
     }
 
-    async Task<CompletionResult> Req() {
+    async Task<CompletionResult> CreateAPIRequestOpenAI() {
         if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
-            res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question,  max_tokens: 100, top_p: 1));  // temperature: 0.1));        
+            res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, max_tokens: 100, top_p: 1));  // temperature: 0.1));        
         } else {
             res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, 200, 0.5, presencePenalty: 0.1, frequencyPenalty: 0.1));  // temperature: 0.1));        
         }
         playAudio = true;
         return res;
-    }
-
-    bool playAudio = false;
+    }    
 
     private void Update() {
-        if (res != null && 
+        if (res != null &&
             res.Completions.Count > 0 && playAudio) {
-            Debug.Log(res.Completions[0].Text);
-            if (personalityProfile.personality == ChatbotPersonalityProfile.ProfileSelection.SuperSmart) {
-                hello.inputField.text = res.Completions[0].Text;
-            } else {
-                hello.inputField.text = res.Completions[0].Text;
-            }
-            hello.ButtonClick();
+            Debug.Log(res.Completions[0].Text); // log response from OpenAI
+
+            azureVoice.inputField.text = res.Completions[0].Text;
+            
+            azureVoice.InvokeAzureVoiceRequest();
             playAudio = false;
         }
+    }
+
+    /// <summary>
+    /// Using Google Streaming Recognizer component, the callback for "OnFinalResult"
+    /// will invoke this method which feeds input to GPT3 API.
+    /// </summary>
+    /// <param name="youSaid"></param>
+    public void OnFinalResult(string youSaid) {
+        textDebugger.text = "you said: " + youSaid;// + "\n\nPress submit button if that's right";
+        question = youSaid;
+        SendRequestVoice();
     }
 
     private async Task StreamCompletionAsync(CompletionRequest completionRequest, object request, bool v) {
@@ -90,7 +106,7 @@ public class TestAPIHit : MonoBehaviour {
 
 }
 [System.Serializable]
-public class PersonalityProfile {
+public class ChatbotPersonalityProfile {
     [System.Serializable]
     public enum ProfileSelection {
         SuperSmart,
@@ -116,7 +132,7 @@ public class PersonalityProfile {
         "Q: How many squigs are in a bonk?" +
         "A: Unknown";
     string Alireza = "My name is Alireza and I am a principal software engineer studying multi-sensory mixed reality and AI at ASU. This is a paragraph summary of my research experience:";
-    public PersonalityProfile() {
+    public ChatbotPersonalityProfile() {
         personalities = new Dictionary<ProfileSelection, string>();
         personalities.Add(ProfileSelection.SuperSmart, SuperSmart);
         personalities.Add(ProfileSelection.Alirza, Alireza);

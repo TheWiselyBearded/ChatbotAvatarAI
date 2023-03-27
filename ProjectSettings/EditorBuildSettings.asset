@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HelloWorldAvatarVR.unity
     guid: 61842db7168b02c4eaf7352cbe124c30
+  - enabled: 1
+    path: Assets/Scenes/ChatAI_VR 1.unity
+    guid: eddbcda9da23b0f498a8a6470b965139
+  - enabled: 1
+    path: Assets/Samples/Aura/Scenes/MovementAura.unity
+    guid: 0800a68d773f2794188ecd4b64498b9e
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2a125f42409fb6541857a5a9cd389a75,
       type: 2}

@@ -9,8 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.CognitiveServices.Speech;
 
-public class HelloWorld : MonoBehaviour
-{
+/// <summary>
+/// This component contains a oculus lip sync listener. So when the Audio Source starts playing, the lip sync picks up on it.
+/// </summary>
+public class AzureVoiceGenerator : MonoBehaviour {
     // Hook up the three properties below with a Text, InputField and Button object in your UI.
     public Text outputText;
     public InputField inputField;
@@ -31,10 +33,13 @@ public class HelloWorld : MonoBehaviour
     private SpeechConfig speechConfig;
     private SpeechSynthesizer synthesizer;
 
-    public void ButtonClick()
-    {
-        lock (threadLocker)
-        {
+
+    /// <summary>
+    /// With a hard-coded reference to input field, this method
+    /// is invoked externally, reads the text from the input field and feeds it to azure voice synthesizer
+    /// </summary>
+    public void InvokeAzureVoiceRequest() {
+        lock (threadLocker) {
             waitingForSpeak = true;
         }
 
@@ -42,8 +47,7 @@ public class HelloWorld : MonoBehaviour
         var startTime = DateTime.Now;
 
         // Starts speech synthesis, and returns once the synthesis is started.
-        using (var result = synthesizer.StartSpeakingTextAsync(inputField.text).Result)
-        {
+        using (var result = synthesizer.StartSpeakingTextAsync(inputField.text).Result) {
             // Native playback is not supported on Unity yet (currently only supported on Windows/Linux Desktop).
             // Use the Unity API to play audio here as a short term solution.
             // Native playback support will be added in the future release.
@@ -55,33 +59,26 @@ public class HelloWorld : MonoBehaviour
                 1,
                 SampleRate,
                 true,
-                (float[] audioChunk) =>
-                {
+                (float[] audioChunk) => {
                     var chunkSize = audioChunk.Length;
                     var audioChunkBytes = new byte[chunkSize * 2];
                     var readBytes = audioDataStream.ReadData(audioChunkBytes);
-                    if (isFirstAudioChunk && readBytes > 0)
-                    {
+                    if (isFirstAudioChunk && readBytes > 0) {
                         var endTime = DateTime.Now;
                         var latency = endTime.Subtract(startTime).TotalMilliseconds;
                         newMessage = $"Speech synthesis succeeded!\nLatency: {latency} ms.";
                         isFirstAudioChunk = false;
                     }
 
-                    for (int i = 0; i < chunkSize; ++i)
-                    {
-                        if (i < readBytes / 2)
-                        {
+                    for (int i = 0; i < chunkSize; ++i) {
+                        if (i < readBytes / 2) {
                             audioChunk[i] = (short)(audioChunkBytes[i * 2 + 1] << 8 | audioChunkBytes[i * 2]) / 32768.0F;
-                        }
-                        else
-                        {
+                        } else {
                             audioChunk[i] = 0.0f;
                         }
                     }
 
-                    if (readBytes == 0)
-                    {
+                    if (readBytes == 0) {
                         Thread.Sleep(200); // Leave some time for the audioSource to finish playback
                         audioSourceNeedStop = true;
                     }
@@ -91,10 +88,8 @@ public class HelloWorld : MonoBehaviour
             audioSource.Play();
         }
 
-        lock (threadLocker)
-        {
-            if (newMessage != null)
-            {
+        lock (threadLocker) {
+            if (newMessage != null) {
                 message = newMessage;
             }
 
@@ -102,69 +97,54 @@ public class HelloWorld : MonoBehaviour
         }
     }
 
-    void Start()
-    {
+    void Start() {
         if (outputText == null) UnityEngine.Debug.LogError("outputText property is null! Assign a UI Text element to it.");
         else if (inputField == null) {
             message = "inputField property is null! Assign a UI InputField element to it.";
             UnityEngine.Debug.LogError(message);
-        }
-        else if (speakButton == null) {
+        } else if (speakButton == null) {
             message = "speakButton property is null! Assign a UI Button to it.";
             UnityEngine.Debug.LogError(message);
-        }
-        else {
+        } else {
             // Continue with normal initialization, Text, InputField and Button objects are present.
             inputField.text = "Enter text you wish spoken here.";
             message = "Click button to synthesize speech";
             //speakButton.onClick.AddListener(ButtonClick);
-
             // Creates an instance of a speech config with specified subscription key and service region.
             speechConfig = SpeechConfig.FromSubscription(SubscriptionKey, Region);
-
             // The default format is RIFF, which has a riff header.
             // We are playing the audio in memory as audio clip, which doesn't require riff header.
             // So we need to set the format to raw (24KHz for better quality).
             speechConfig.SetSpeechSynthesisOutputFormat(SpeechSynthesisOutputFormat.Raw24Khz16BitMonoPcm);
-
             // Creates a speech synthesizer.
             // Make sure to dispose the synthesizer after use!
             synthesizer = new SpeechSynthesizer(speechConfig, null);
-
-            synthesizer.SynthesisCanceled += (s, e) =>
-            {
+            synthesizer.SynthesisCanceled += (s, e) => {
                 var cancellation = SpeechSynthesisCancellationDetails.FromResult(e.Result);
                 message = $"CANCELED:\nReason=[{cancellation.Reason}]\nErrorDetails=[{cancellation.ErrorDetails}]\nDid you update the subscription info?";
             };
         }
     }
 
-    void Update()
-    {
-        lock (threadLocker)
-        {
-            if (speakButton != null)
-            {
+    void Update() {
+        lock (threadLocker) {
+            if (speakButton != null) {
                 speakButton.interactable = !waitingForSpeak;
             }
 
-            if (outputText != null)
-            {
+            if (outputText != null) {
                 outputText.text = message;
             }
 
-            if (audioSourceNeedStop)
-            {
+            if (audioSourceNeedStop) {
                 audioSource.Stop();
                 audioSourceNeedStop = false;
             }
         }
     }
 
-    void OnDestroy()
-    {
-        if (synthesizer != null)
-        {
+    void OnDestroy() {
+        if (synthesizer != null) {
             synthesizer.Dispose();
         }
     }

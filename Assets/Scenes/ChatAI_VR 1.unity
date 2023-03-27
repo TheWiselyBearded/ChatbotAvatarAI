@@ -372,6 +372,8 @@ GameObject:
   - component: {fileID: 160527262}
   - component: {fileID: 160527261}
   - component: {fileID: 160527263}
+  - component: {fileID: 160527265}
+  - component: {fileID: 160527264}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -472,7 +474,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 160527256}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9267197cda936e448a0687481a78084, type: 3}
   m_Name: 
@@ -493,7 +495,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 160527256}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a7b6755f90c23d4baa1a1832f01becf, type: 3}
   m_Name: 
@@ -516,6 +518,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gpt3: {fileID: 160527261}
   textMesh: {fileID: 2072247204}
+--- !u!114 &160527264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160527256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb012683771d5542b9bb655b06b6026, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outputText: {fileID: 571783798}
+  inputField: {fileID: 1063444687}
+  speakButton: {fileID: 1445837540}
+  audioSource: {fileID: 791813957}
+--- !u!114 &160527265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160527256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffdd35957af44b542b9a29574fb5e9b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  azureVoice: {fileID: 160527264}
+  personalityProfile:
+    personality: 0
+  startingPrompt: 'I am a highly intelligent question answering bot. If you ask me
+    a question that is rooted in truth, I will give you the answer. If you ask me
+    a question that is nonsense, trickery, or has no clear answer, I will respond
+    with "Unknown". Q: What is human life expectancy in the United States?'
+  textInput: {fileID: 1063444687}
+  textDebugger: {fileID: 2072247204}
+  question: 
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +631,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 6.2e-43, y: 4.9e-44, z: 0, w: 914.7046}
+  m_BoundingSphereOverride: {x: 0, y: 3.4e-44, z: 0, w: NaN}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1186,7 +1226,7 @@ Light:
   m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.0509228e-38, y: 5.7201887e-37, z: 15.846061, w: -2524.2258}
+  m_BoundingSphereOverride: {x: 2.75506e-40, y: 9.1869e-41, z: 1.8e-43, w: 1e-45}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1775,8 +1815,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506884610}
-  m_LocalRotation: {x: -0, y: 0.92664826, z: -0, w: 0.37592968}
-  m_LocalPosition: {x: -0.9996205, y: 1.399, z: 0.8208573}
+  m_LocalRotation: {x: -0, y: 0.95232093, z: -0, w: 0.30509812}
+  m_LocalPosition: {x: -0.65687245, y: 1.164, z: 0.756}
   m_LocalScale: {x: 0.052237105, y: 0.052237105, z: 0.052237105}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1785,7 +1825,7 @@ Transform:
   - {fileID: 236934653}
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 135.836, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 144.472, z: 0}
 --- !u!1 &510206364
 GameObject:
   m_ObjectHideFlags: 0
@@ -3503,7 +3543,7 @@ PrefabInstance:
     - target: {fileID: 8658488230205805792, guid: ae65d6748ee4f2c48bfebee743f8b12c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8658488230205805794, guid: ae65d6748ee4f2c48bfebee743f8b12c,
         type: 3}
@@ -3909,8 +3949,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867591616}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.97400004}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.9501066}
+  m_LocalScale: {x: -1, y: 1, z: 0.72980005}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 470640861}
@@ -4270,7 +4310,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.402e-41, y: 4.2e-44, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 2.8469e-39, y: 0, z: 0, w: NaN}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -6785,6 +6825,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3140805194830035446, guid: b605c55374dd7cb41a35e0bfa7d02148,
         type: 3}
+      propertyPath: _mirrorNormal.z
+      value: 0.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 3140805194830035446, guid: b605c55374dd7cb41a35e0bfa7d02148,
+        type: 3}
       propertyPath: _transformToMirror
       value: 
       objectReference: {fileID: 867591617}
@@ -7046,10 +7091,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2120431946}
     m_Modifications:
+    - target: {fileID: 2172758742605343550, guid: b7deeec84cfb5464f8178d08a689fcf0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3501206464977306208, guid: b7deeec84cfb5464f8178d08a689fcf0,
         type: 3}
       propertyPath: m_Name
       value: AuraFirstPerson
+      objectReference: {fileID: 0}
+    - target: {fileID: 3996650893256479917, guid: b7deeec84cfb5464f8178d08a689fcf0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4313630502284581082, guid: b7deeec84cfb5464f8178d08a689fcf0,
         type: 3}
@@ -7306,7 +7361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2072247204
 MonoBehaviour:
   m_ObjectHideFlags: 0
