@@ -1,4 +1,5 @@
 using OpenAI_API;
+using OpenAI_API.Completions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,7 +65,9 @@ public class ChatBotController : MonoBehaviour {
 
     // Asynchronous method to create OpenAI API request
     async Task<CompletionResult> CreateAPIRequestOpenAI() {
-        res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
+        //res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
+        //                                                    presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
+        res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, OpenAI_API.Models.Model.ChatGPTTurbo, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
                                                             presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
         playAudio = true;
         return res;

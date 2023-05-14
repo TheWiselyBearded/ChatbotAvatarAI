@@ -1447,6 +1447,8 @@ MonoBehaviour:
   outputText: {fileID: 571783798}
   inputField: {fileID: 1063444687}
   audioSource: {fileID: 791813957}
+  SubscriptionKey: 
+  Region: 
 --- !u!114 &434629152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4741,7 +4743,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343432139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e529e13902f33534182e17770d8a975d, type: 3}
   m_Name: 
