@@ -1,5 +1,6 @@
 using OpenAI_API;
 using OpenAI_API.Completions;
+using OpenAI_API.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -65,10 +66,10 @@ public class ChatBotController : MonoBehaviour {
 
     // Asynchronous method to create OpenAI API request
     async Task<CompletionResult> CreateAPIRequestOpenAI() {
-        //res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
-        //                                                    presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
-        res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, OpenAI_API.Models.Model.ChatGPTTurbo, requestConfiguration.MaxTokens, requestConfiguration.Temperature,
-                                                            presencePenalty : requestConfiguration.PresencePenalty, frequencyPenalty : requestConfiguration.FrequencyPenalty));
+        Debug.Log($"question {question}");
+        res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, Model.DavinciText, max_tokens: requestConfiguration.MaxTokens, temperature: requestConfiguration.Temperature,
+                                                            presencePenalty: requestConfiguration.PresencePenalty, frequencyPenalty: requestConfiguration.FrequencyPenalty));
+        Debug.Log("Transmitted completion request");
         playAudio = true;
         return res;
     }    
@@ -93,6 +94,7 @@ public class ChatBotController : MonoBehaviour {
     /// </summary>
     /// <param name="youSaid"></param>
     public void OnFinalResult(string youSaid) {
+        Debug.Log($"{youSaid}");
         textDebugger.text = "you said: " + youSaid;
         question = youSaid;
         SendRequest();
