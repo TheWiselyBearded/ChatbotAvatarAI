@@ -57,7 +57,20 @@ public class ChatGPTSample : MonoBehaviour
         } else if (Input.GetKeyUp(KeyCode.N)) SubmitConvoReq();
     }
 
+    /// <summary>
+    /// Method to handle user input from Google Cloud Speech to Text API
+    /// Using Google Streaming Recognizer component, the callback for "OnFinalResult"
+    /// will invoke this method which feeds input to GPT3 API.
+    /// </summary>
+    /// <param name="youSaid"></param>
+    public void OnFinalResult(string youSaid) {
+        Debug.Log($"{youSaid}");
+        input = youSaid;
+        SubmitConvoReq();
+    }
+
     public void SubmitConvoReq() {
+        Debug.Log("Sending msg to openai server");
         var CompletionReqTask = Task.Run(() => AppendConversation(input).Wait());
     }
 
@@ -71,21 +84,16 @@ public class ChatGPTSample : MonoBehaviour
         chat = api.Chat.CreateConversation();
         /// give instruction as System
         //chat.AppendSystemMessage("You are a AI system that understands all of human knowledge.  If the asks you a question, please answer intelligently and fully.");        
-        chat.AppendSystemMessage("You are a medieval sorcerer that knows all knowledge in a land known as Eckalu.  If the asks you a question, please answer intelligently and fully about your medieval sorcerer expertise and knowledge of Eckalu");
+        chat.AppendSystemMessage("You are a medieval sorcerer that knows all knowledge in a land known as Eckalu.  For any question the user rasks you, please answer intelligently and fully about your knowledge of Eckalu");
     }
     
     async Task DebugConvo() {
-        // give a few examples as user and assistant
-        //chat.AppendUserInput("Is this an animal? Cat");
-        //chat.AppendExampleChatbotOutput("Yes");
-        
         // now let's ask it a question'
-        //chat.AppendUserInput("What is it that theoretical physcists claim to be the theory of everything?");
         chat.AppendUserInput("What is it about Eckalu that makes it to mystical?");
         // and get the response
         chatResponse = await chat.GetResponseFromChatbotAsync();
         Debug.Log(chatResponse); // "Yes"
-                             // Set text for Azure Voice API to speak        
+        // Set text for Azure Voice API to speak        
     }
 
 

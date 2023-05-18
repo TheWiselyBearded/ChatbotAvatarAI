@@ -94,6 +94,7 @@ public class ChatBotController : MonoBehaviour {
     /// </summary>
     /// <param name="youSaid"></param>
     public void OnFinalResult(string youSaid) {
+        if (!this.isActiveAndEnabled) return;
         Debug.Log($"{youSaid}");
         textDebugger.text = "you said: " + youSaid;
         question = youSaid;
