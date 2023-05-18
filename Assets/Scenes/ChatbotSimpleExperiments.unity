@@ -1763,7 +1763,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434629150}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffdd35957af44b542b9a29574fb5e9b3, type: 3}
   m_Name: 
@@ -1785,6 +1785,10 @@ MonoBehaviour:
       you ask me a question that is rooted in truth, I will give you the answer.
       If you ask me a question that is nonsense, trickery, or has no clear answer,
       I will respond with \"Unknown\".
+  - PersonalityName: Wizard
+    PersonalityDescription: You are a medieval sorcerer that knows all knowledge
+      in a land known as Eckalu.  For any question the user rasks you, please answer
+      intelligently and fully about your knowledge of Eckalu
   setPersonalityProfileName: Alireza
   textDebugger: {fileID: 2072247204}
   question: 
@@ -1810,7 +1814,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434629150}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebd14ae65b152dd479fa751a40054498, type: 3}
   m_Name: 

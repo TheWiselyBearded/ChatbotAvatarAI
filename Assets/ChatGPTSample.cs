@@ -37,7 +37,7 @@ public class ChatGPTSample : MonoBehaviour
         api = new OpenAIAPI(new APIAuthentication(configData.OpenAI_APIKey));
         azureVoice.SetServiceConfiguration(configData.AzureVoiceSubscriptionKey, configData.AzureVoiceRegion);
         //var ConversationReqTask = Task.Run(() => CreateConversationRequest().Wait());
-        //var CompletionReqTask = Task.Run(() => CompletionReq().Wait());
+        //var CompletionReqTask = Task.Run(() => CompletionReqGPT4().Wait());
 
 
         CreateContinuousConversation();
@@ -64,6 +64,7 @@ public class ChatGPTSample : MonoBehaviour
     /// </summary>
     /// <param name="youSaid"></param>
     public void OnFinalResult(string youSaid) {
+        if (!this.isActiveAndEnabled) return;
         Debug.Log($"{youSaid}");
         input = youSaid;
         SubmitConvoReq();
