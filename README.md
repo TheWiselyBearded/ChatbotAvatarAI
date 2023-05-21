@@ -21,6 +21,8 @@ The `Camera Streamer` component allows you to specify the endpoint of the YOLO-N
 
 Make sure to configure the necessary settings and explore the various components to customize and enhance the NPC's behavior and interactions.
 
+For the YOLO-NAS server instance, please check out [this repository](https://github.com/TheWiselyBearded/yolonas-server/tree/main).
+
 ## Roadmap:
 - Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
