@@ -10,12 +10,24 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using static ChatBotController;
 
 public class ChatBotController : MonoBehaviour {
-    // Set up references to other components and APIs
+    public bool conversationStarter;
+
+    public delegate void NPCSpeakAction(string response, ChatBotController chatbotController);
+    public event NPCSpeakAction OnNPCSpeakAction;
+
+    public delegate void PlayerSpeakAction(bool state);
+    public static event PlayerSpeakAction OnPlayerSpeakAction;
+
+    /// <summary>
+    /// References to other components and APIs
+    /// </summary>
     public AzureVoiceGenerator azureVoice;
     public StreamingRecognizer googleStreamingRecognizer;
     public OpenAIAPI api;
@@ -67,7 +79,30 @@ public class ChatBotController : MonoBehaviour {
         }
         if (setPersonalityProfileName == "") setPersonalityProfileName = personalityProfiles[0].PersonalityName; // Default personality profile
         if (chatMode == ChatMode.ChatGPT3_5) CreateContinuousConversation();
+        Initialize();
 
+    }
+
+    public void Initialize() {
+        if (conversationStarter) 
+            GetComponent<Collider>().isTrigger = true;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        //Debug.Log($"Collided with player {other.name}");
+        if (other.gameObject.CompareTag("Player") || 
+            other.gameObject.CompareTag("NPC")) {
+            if (conversationStarter) {
+                SubmitConversationRequest("Introduce yourself please");
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player")) {
+            Debug.Log("Invoking player exit");
+            OnPlayerSpeakAction?.Invoke(false);
+        }
     }
 
     public void SendRequestDaVinci() {
@@ -82,7 +117,10 @@ public class ChatBotController : MonoBehaviour {
     }
 
 
-    // Asynchronous method to create OpenAI API request
+    /// <summary>
+    /// Asynchronous method to create OpenAI API request
+    /// </summary>
+    /// <returns>The completion result</returns>
     async Task<CompletionResult> CreateCompletionDaVinciAPIRequestOpenAI() {
         Debug.Log($"question {question}");
         res = await api.Completions.CreateCompletionAsync(new CompletionRequest(question, Model.DavinciText, max_tokens: requestConfiguration.MaxTokens, temperature: requestConfiguration.Temperature,
@@ -109,7 +147,11 @@ public class ChatBotController : MonoBehaviour {
         var CompletionReqTask = Task.Run(() => CompletionReqGPT4(input).Wait());
     }
 
-    // and continue the conversation by asking another
+    /// <summary>
+    /// Append user input to the conversation and get a response
+    /// </summary>
+    /// <param name="msg">The user's message</param>
+    /// <returns>The chat response</returns>
     async Task AppendConversation(string msg) {
         chat.AppendUserInput(msg);
         // and get another response
@@ -132,7 +174,9 @@ public class ChatBotController : MonoBehaviour {
                     //_ = CreateConversationRequest();
                     //var ConversationTask = Task.Run(() => DebugConvo().Wait());
                     azureVoice.inputField.text = chatResponse;
+                    OnNPCSpeakAction?.Invoke(chatResponse, this);
                     azureVoice.InvokeAzureVoiceRequest();
+                    playAudio = false;
                     lastChatResponse = chatResponse;
                 }
                 break;
@@ -140,7 +184,7 @@ public class ChatBotController : MonoBehaviour {
                 if (res != null &&
             res.Completions.Count > 0 && playAudio) {   // essentially: if audio received for playback
                     Debug.Log(res.Completions[0].Text); // log response from OpenAI
-
+                    OnNPCSpeakAction?.Invoke(res.Completions[0].Text, this);
                     // Set text for Azure Voice API to speak
                     azureVoice.inputField.text = res.Completions[0].Text;
 
@@ -153,15 +197,18 @@ public class ChatBotController : MonoBehaviour {
 
     /// <summary>
     /// Method to handle user input from Google Cloud Speech to Text API
-    /// Using Google Streaming Recognizer component, the callback for "OnFinalResult"
-    /// will invoke this method which feeds input to GPT3 API.
     /// </summary>
-    /// <param name="youSaid"></param>
+    /// <param name="youSaid">The user's speech input</param>
     public void OnFinalResult(string youSaid) {
         if (!this.isActiveAndEnabled) return;
         Debug.Log($"{youSaid}");
         textDebugger.text = "you said: " + youSaid;
         question = youSaid;
+        OnPlayerSpeakAction?.Invoke(true);
+        SubmitConversationRequest(question);
+    }
+
+    public void SubmitConversationRequest(string question) {
         switch (chatMode) {
             case ChatMode.ChatGPT3_5:
                 SubmitConvoReqChatGPT(question);
@@ -172,7 +219,7 @@ public class ChatBotController : MonoBehaviour {
             case ChatMode.CompletionResponseGPT4:
                 SubmitCompletionReqGPT4(question);
                 break;
-        }        
+        }
     }
 
     /*private async Task StreamCompletionAsync(CompletionRequest completionRequest, object request, bool v) {
@@ -180,6 +227,25 @@ public class ChatBotController : MonoBehaviour {
             new CompletionRequest("My name is Roger and I am a principal software engineer at Salesforce.  This is my resume:", 200, 0.5, presencePenalty: 0.1, frequencyPenalty: 0.1),
             res => textDebugger.text += res.ToString());
     }*/
+
+    public void NPC_ChatbotResponse(string NPCInput, ChatBotController chatBot) {
+        Debug.Log("NPC_ChatbotResponse");
+        AudioSource chatBotAudio = chatBot.azureVoice.audioSource;
+        // Start a coroutine to wait for audio completion
+        chatBot.StartCoroutine(WaitForAudioCompletion(NPCInput, chatBotAudio));
+    }
+
+    private IEnumerator WaitForAudioCompletion(string NPCInput, AudioSource chatBotAudio) {
+        Debug.Log("Coroutine");
+        // Wait until the audio source has stopped playing
+        while (chatBotAudio.isPlaying) {
+            yield return null;
+        }
+
+        // Audio has completed, proceed with invoking the request
+        Debug.Log("Invoking request after audio");
+        SubmitConversationRequest("You are talking to another person. Please respond to what they just said, which is: " + NPCInput);
+    }
 
     async Task CompletionReqGPT4(string input) {
         // TODO: Feed input with merged personality
