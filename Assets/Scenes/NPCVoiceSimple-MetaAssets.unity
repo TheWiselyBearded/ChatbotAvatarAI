@@ -572,7 +572,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 9.1835e-41, y: 5.113411e-37, z: 2.892818e-39, w: 7.34685e-40}
+  m_BoundingSphereOverride: {x: 100, y: 100, z: 100, w: 100}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1106,7 +1106,7 @@ Light:
   m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 3.4e-44, z: 0, w: 2.1443539}
+  m_BoundingSphereOverride: {x: 3e-45, y: 1.2469e-41, z: 1.02e-43, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1462,12 +1462,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   azureVoice: {fileID: 434629151}
+  googleStreamingRecognizer: {fileID: 696362297}
   requestConfiguration:
     FrequencyPenalty: 0.1
     TopP: 1
     Temperature: 0.5
     MaxTokens: 200
     PresencePenalty: 0.1
+  chatMode: 0
   personalityProfiles:
   - PersonalityName: Alireza
     PersonalityDescription: 'My name is Alireza and I am a principal software engineer
@@ -3954,7 +3956,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 2.3509887e-38, z: 2.7107536e-20, w: 7.737127e+25}
+  m_BoundingSphereOverride: {x: 0, y: 2.35e-43, z: 1.02e-43, w: -1.6554894e+29}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
