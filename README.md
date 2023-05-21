@@ -7,6 +7,7 @@ The framework allows for easy integration with YOLO-NAS, enabling the NPC to str
 Roadmap:
 - Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
+- Make use of YOLO-NAS results in OpenAI conversation requests.
 - Implement a more dynamic way of invoking animations.
 
 These additions to the project will enhance its capabilities and expand the available libraries and features over time.
