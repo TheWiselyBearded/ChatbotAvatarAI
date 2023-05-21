@@ -4,7 +4,24 @@ This repository contains a template scene for interfacing with an AI-based NPC u
 
 The framework allows for easy integration with YOLO-NAS, enabling the NPC to stream virtual camera frames and receive responses from a YOLO-NAS server instance, whether local or remote. The response includes all identified objects along with their confidence scores. Additionally, it leverages the Ready Player Me avatar, providing a reference for mapping Oculus lip sync to avatar models.
 
-Roadmap:
+## Usage
+
+Once you've set up the configuration files, you can run the main scenes. After speaking to the NPC, it will respond within seconds. In the `NPCVoiceSimple-MetaAssets` scene, the example models provided by Meta for Lip Sync will respond to user inquiries. In the `NPCVoiceVisionSimple` scene, the NPC can be configured to see its environment using YOLO-NAS.
+
+### Interfacing with OpenAI API
+
+The `ChatbotController` game object contains the main script for interfacing with the OpenAI API. To adjust the input parameters for each OpenAI API request, you can modify this component. 
+
+- **Selecting the Default Model:** You can choose the default model by selecting an option from the model dropdown in the `ChatbotController` inspector.
+- **Assigning a Personality Profile:** To assign a personality profile, specify a name and personality description. To select a personality from the available options, write the name of the personality in the "Set Personality Profile Name" inspector value.
+
+### Working with YOLO-NAS and Camera Streamer
+
+The `Camera Streamer` component allows you to specify the endpoint of the YOLO-NAS server. This component receives a JSON object from the server, listing all identified objects. To process this data, you can explore the `ReceiveData` thread.
+
+Make sure to configure the necessary settings and explore the various components to customize and enhance the NPC's behavior and interactions.
+
+## Roadmap:
 - Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
 - Make use of YOLO-NAS results in OpenAI conversation requests.
@@ -76,17 +93,13 @@ Sometimes on the first time opening the project, you might get the following err
 5. Delete `Newtonsoft.dll` again from the same location
 6. The import should now complete.
 
-## Usage
 
-Once you've set up the configuration files, you can run the scene and begin interacting with the NPC by asking it questions. The NPC will respond within seconds.
 
 ## Notes
 Models Used:
-This project currently uses the TextDavinciV3 model provided by OpenAI's GPT-3 API. Additionally, there is a separate branch attempting to update to the latest publicly available model, ChatGpt3_5Turbo.
+This project currently uses the TextDavinciV3 and the ChatGpt3_5Turbo. It has support for GPT4 (in the code), though the demo scenes do not use.
 
 In addition to the APIs and packages mentioned above, this project also uses the Meta Movement SDK. More information on this SDK can be found in its GitHub repository at https://github.com/oculus-samples/Unity-Movement.
-
-
 
 ## References
 
