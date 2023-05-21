@@ -85,6 +85,7 @@ Create a `gcp_credentials.json` file for Google Cloud runtime to read configurat
 
 
 ### Known Issues
+Google Cloud's speech to text has a time limit of 5 minutes for stream requests. The developer must add the ability to start/stop/restart the stream.
 
 Sometimes on the first time opening the project, you might get the following error message: "Multiple precompiled assemblies with the same name Newtonsoft.Json.dll included on the current platform." This error occurs because Unity enforces a Newtonsoft import due to its services.core dependency. To resolve this error:
 
