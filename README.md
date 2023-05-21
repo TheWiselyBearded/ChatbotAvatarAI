@@ -2,6 +2,17 @@
 
 This repository contains a template scene for interfacing with an AI-based NPC using OpenAI API, Azure Voice API, Google Cloud Speech to Text, and Oculus Lip Sync. The project uses Unity 2021.3.x.
 
+The framework allows for easy integration with YOLO-NAS, enabling the NPC to stream virtual camera frames and receive responses from a YOLO-NAS server instance, whether local or remote. The response includes all identified objects along with their confidence scores. Additionally, it leverages the Ready Player Me avatar, providing a reference for mapping Oculus lip sync to avatar models.
+
+Roadmap:
+- Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
+- Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
+- Implement a more dynamic way of invoking animations.
+
+These additions to the project will enhance its capabilities and expand the available libraries and features over time.
+
+Feel free to contribute to the project!
+
 ## Setup
 
 Before running the scene, you'll need to set up the following services and create a configuration file for the application to read at runtime:
