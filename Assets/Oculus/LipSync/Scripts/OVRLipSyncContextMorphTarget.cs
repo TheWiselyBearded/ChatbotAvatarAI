@@ -186,9 +186,11 @@ public class OVRLipSyncContextMorphTarget : MonoBehaviour
             laughterScore = Mathf.Min(laughterScore * laughterMultiplier, 1.0f);
             laughterScore *= 1.0f / laughterThreshold;
 
-            skinnedMeshRenderer.SetBlendShapeWeight(
-                laughterBlendTarget,
-                laughterScore * 100.0f);
+            if (skinnedMeshRenderer.sharedMesh.blendShapeCount > 20) {
+                skinnedMeshRenderer.SetBlendShapeWeight(
+                    laughterBlendTarget,
+                    laughterScore * 100.0f);
+            }
         }
     }
 
