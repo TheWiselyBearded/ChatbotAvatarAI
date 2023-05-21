@@ -1,3 +1,4 @@
+using GoogleCloudStreamingSpeechToText;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Completions;
@@ -16,6 +17,7 @@ using UnityEngine.Windows;
 public class ChatBotController : MonoBehaviour {
     // Set up references to other components and APIs
     public AzureVoiceGenerator azureVoice;
+    public StreamingRecognizer googleStreamingRecognizer;
     public OpenAIAPI api;
     public OpenAI_RequestConfiguration requestConfiguration;
     public CompletionResult res;
@@ -54,6 +56,10 @@ public class ChatBotController : MonoBehaviour {
         api = new OpenAIAPI(new APIAuthentication(configData.OpenAI_APIKey));
         azureVoice.SetServiceConfiguration(configData.AzureVoiceSubscriptionKey, configData.AzureVoiceRegion);
 
+        googleStreamingRecognizer = FindObjectOfType<StreamingRecognizer>();
+        if (googleStreamingRecognizer == null) Debug.LogError("Add Streaming Recognizer to scene");
+        googleStreamingRecognizer.onFinalResult.AddListener(OnFinalResult);
+
         // Set up dictionary of personality profiles
         chatbotPersonalities = new Dictionary<string, ChatbotPersonalityProfile>();
         foreach (ChatbotPersonalityProfile chatbotPersonality in personalityProfiles) {
@@ -61,8 +67,6 @@ public class ChatBotController : MonoBehaviour {
         }
         if (setPersonalityProfileName == "") setPersonalityProfileName = personalityProfiles[0].PersonalityName; // Default personality profile
         if (chatMode == ChatMode.ChatGPT3_5) CreateContinuousConversation();
-        //StreamCompletionAsync(CompletionRequest request, Action < CompletionResult > resultHandler);        
-        //var result = Task.Run(Req);   // Get the Unity synchronization context
 
     }
 
@@ -91,8 +95,8 @@ public class ChatBotController : MonoBehaviour {
     void CreateContinuousConversation() {
         chat = api.Chat.CreateConversation();
         /// give instruction as System
-        //chat.AppendSystemMessage("You are a AI system that understands all of human knowledge.  If the asks you a question, please answer intelligently and fully.");        
-        chat.AppendSystemMessage("You are a medieval sorcerer that knows all knowledge in a land known as Eckalu.  For any question the user rasks you, please answer intelligently and fully about your knowledge of Eckalu");
+        //chat.AppendSystemMessage("You are a medieval sorcerer that knows all knowledge in a land known as Eckalu.  For any question the user rasks you, please answer intelligently and fully about your knowledge of Eckalu");
+        chat.AppendSystemMessage(chatbotPersonalities[setPersonalityProfileName].PersonalityDescription);
     }
 
     public void SubmitConvoReqChatGPT(string input) {
@@ -110,9 +114,7 @@ public class ChatBotController : MonoBehaviour {
         chat.AppendUserInput(msg);
         // and get another response
         chatResponse = await chat.GetResponseFromChatbotAsync();
-        Debug.Log(chatResponse); // "No"
-        //azureVoice.inputField.text = chatResponse;
-        //azureVoice.InvokeAzureVoiceRequest();
+        Debug.Log(chatResponse); 
     }
 
     protected void GetChatHistory() {
