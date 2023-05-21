@@ -8,7 +8,9 @@ Roadmap:
 - Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
 - Make use of YOLO-NAS results in OpenAI conversation requests.
-- Implement a more dynamic way of invoking animations.
+- Add example scene with Avaturn Avatar Models (https://avaturn.me/).
+- Group NPC conversations.
+- Implement a dynamic way of invoking pre-downloaded animations.
 
 These additions to the project will enhance its capabilities and expand the available libraries and features over time.
 
