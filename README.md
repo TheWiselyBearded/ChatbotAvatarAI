@@ -32,8 +32,9 @@ Check out the `NPCGroup` scene to setup multiple NPCs to chat with one another. 
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
 - Make use of YOLO-NAS results in OpenAI conversation requests.
 - Add example scene with Avaturn Avatar Models (https://avaturn.me/).
-- Group NPC conversations.
+- Further test group NPC conversations.
 - Implement a dynamic way of invoking pre-downloaded animations.
+- Update Meta Movement SDK to support URP and resolve pink assets
 
 These additions to the project will enhance its capabilities and expand the available libraries and features over time.
 
