@@ -23,6 +23,10 @@ Make sure to configure the necessary settings and explore the various components
 
 For the YOLO-NAS server instance, please check out [this repository](https://github.com/TheWiselyBearded/yolonas-server/tree/main).
 
+### Group Based NPCs [Experimental]
+
+Check out the `NPCGroup` scene to setup multiple NPCs to chat with one another. One NPC is design to invoke the conversation about collision with another NPC (or player). USing the `NPCGroupCommunicator` component, simply assign the NPC group you'd like and they'll use event systems to communicate with one another once they finish speaking.
+
 ## Roadmap:
 - Integrate RageAgainstThePixel's Open AI library (https://github.com/RageAgainstThePixel/com.openai.unity).
 - Add support for Eleven Labs' text-to-voice library (https://github.com/RageAgainstThePixel/com.rest.elevenlabs).
