@@ -13,7 +13,7 @@ Once you've set up the configuration files, you can run the main scenes. After s
 The `ChatbotController` game object contains the main script for interfacing with the OpenAI API. To adjust the input parameters for each OpenAI API request, you can modify this component. 
 
 - **Selecting the Default Model:** You can choose the default model by selecting an option from the model dropdown in the `ChatbotController` inspector.
-- **Assigning a Personality Profile:** To assign a personality profile, specify a name and personality description. To select a personality from the available options, write the name of the personality in the "Set Personality Profile Name" inspector value.
+- **Assigning a Personality Profile:** To assign a personality profile, specify a name and personality description in the   `ChatbotController` component. To select a personality from the available options, write the name of the personality in the "Set Personality Profile Name" inspector value.
 
 ### Working with YOLO-NAS and Camera Streamer
 
