@@ -17,11 +17,13 @@ The `ChatbotController` game object contains the main script for interfacing wit
 
 ### Working with YOLO-NAS and Camera Streamer
 
+![Demonstration](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDQwZGQ5MzQ5NTczOWQwZGQ2NDc2YTYzODEwNTE5ODc1MjhiZTc4ZCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/9uZml4jP9psLdumJG9/giphy.gif)
+
 The `Camera Streamer` component allows you to specify the endpoint of the YOLO-NAS server. This component receives a JSON object from the server, listing all identified objects. To process this data, you can explore the `ReceiveData` thread.
 
 Make sure to configure the necessary settings and explore the various components to customize and enhance the NPC's behavior and interactions.
 
-For the YOLO-NAS server instance, please check out [this repository](https://github.com/TheWiselyBearded/yolonas-server/tree/main).
+**For the YOLO-NAS server instance, please check out [this repository](https://github.com/TheWiselyBearded/yolonas-server/tree/main).**
 
 ### Group Based NPCs [Experimental]
 
