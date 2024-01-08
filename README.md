@@ -1,5 +1,7 @@
 # AI NPC Unity Template Scene
 
+**Please find the updated version of this repository [here](https://github.com/TheWiselyBearded/AI_NPC), featuring more modern SDKs and a modular system design.**
+
 This repository contains a template scene for interfacing with an AI-based NPC using OpenAI API, Azure Voice API, Google Cloud Speech to Text, and Oculus Lip Sync. The project uses Unity 2021.3.x.
 
 The framework allows for easy integration with YOLO-NAS, enabling the NPC to stream virtual camera frames and receive responses from a YOLO-NAS server instance, whether local or remote. The response includes all identified objects along with their confidence scores. Additionally, it leverages the Ready Player Me avatar, providing a reference for mapping Oculus lip sync to avatar models.
